@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Opus – Your Elegant Task Concierge</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#d4af37',secondary:'#1e5631'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+<style>
+:where([class^="ri-"])::before { content: "\f3c2"; }
+body {
+font-family: 'Poppins', sans-serif;
+background-color: #121212;
+color: #e0e0e0;
+transition: all 0.3s ease;
+}
+.heading-font {
+font-family: 'Poppins', sans-serif;
+font-weight: 600;
+letter-spacing: -0.02em;
+}
+.glassmorphism {
+background: rgba(30, 30, 30, 0.7);
+backdrop-filter: blur(10px);
+border: 1px solid rgba(255, 255, 255, 0.05);
+}
+.task-card {
+transition: all 0.3s ease;
+}
+.task-card:hover {
+transform: translateY(-2px);
+box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+.sidebar-item {
+transition: all 0.2s ease;
+}
+.sidebar-item:hover {
+background-color: rgba(212, 175, 55, 0.1);
+}
+.sidebar-item.active {
+background-color: rgba(212, 175, 55, 0.15);
+border-left: 3px solid #d4af37;
+}
+.priority-high {
+background: linear-gradient(to right, rgba(220, 38, 38, 0.2), rgba(220, 38, 38, 0.05));
+border-left: 3px solid #dc2626;
+}
+.priority-medium {
+background: linear-gradient(to right, rgba(245, 158, 11, 0.2), rgba(245, 158, 11, 0.05));
+border-left: 3px solid #f59e0b;
+}
+.priority-low {
+background: linear-gradient(to right, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.05));
+border-left: 3px solid #10b981;
+}
+.custom-checkbox {
+appearance: none;
+-webkit-appearance: none;
+width: 20px;
+height: 20px;
+border: 2px solid rgba(212, 175, 55, 0.5);
+border-radius: 50%;
+cursor: pointer;
+display: flex;
+align-items: center;
+justify-content: center;
+outline: none;
+transition: all 0.2s ease;
+}
+.custom-checkbox:checked {
+background-color: #d4af37;
+border-color: #d4af37;
+}
+.custom-checkbox:checked::after {
+content: "";
+width: 6px;
+height: 10px;
+border: solid white;
+border-width: 0 2px 2px 0;
+transform: rotate(45deg);
+position: relative;
+top: -2px;
+}
+.custom-switch {
+position: relative;
+display: inline-block;
+width: 48px;
+height: 24px;
+}
+.custom-switch input {
+opacity: 0;
+width: 0;
+height: 0;
+}
+.slider {
+position: absolute;
+cursor: pointer;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background-color: rgba(255, 255, 255, 0.1);
+transition: .4s;
+border-radius: 24px;
+}
+.slider:before {
+position: absolute;
+content: "";
+height: 18px;
+width: 18px;
+left: 3px;
+bottom: 3px;
+background-color: white;
+transition: .4s;
+border-radius: 50%;
+}
+input:checked + .slider {
+background-color: #d4af37;
+}
+input:checked + .slider:before {
+transform: translateX(24px);
+}
+.completed {
+text-decoration: line-through;
+opacity: 0.6;
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+-webkit-appearance: none;
+margin: 0;
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+filter: invert(1);
+cursor: pointer;
+}
+.task-progress {
+height: 4px;
+background-color: rgba(255, 255, 255, 0.1);
+border-radius: 2px;
+overflow: hidden;
+}
+.task-progress-bar {
+height: 100%;
+background-color: #d4af37;
+border-radius: 2px;
+transition: width 0.3s ease;
+}
+.quote-container {
+background: linear-gradient(135deg, rgba(30, 86, 49, 0.3), rgba(30, 30, 60, 0.3));
+}
+</style>
+</head>
+<body class="min-h-screen flex flex-col">
+<div class="flex h-screen overflow-hidden">
+<!-- Sidebar -->
+<aside class="hidden md:flex flex-col w-64 glassmorphism border-r border-gray-800">
+<div class="p-6">
+<h1 class="text-3xl font-['Pacifico'] text-primary">logo</h1>
+</div>
+<div class="flex-1 overflow-y-auto py-4 px-3">
+<nav>
+<ul class="space-y-2">
+<li>
+<a href="#" class="sidebar-item active flex items-center p-3 rounded-lg text-white">
+<div class="w-6 h-6 flex items-center justify-center mr-3">
+<i class="ri-dashboard-line"></i>
+</div>
+<span>Dashboard</span>
+</a>
+</li>
+<li>
+<a href="#" class="sidebar-item flex items-center p-3 rounded-lg text-gray-300 hover:text-white">
+<div class="w-6 h-6 flex items-center justify-center mr-3">
+<i class="ri-calendar-check-line"></i>
+</div>
+<span>Today</span>
+</a>
+</li>
+<li>
+<a href="#" class="sidebar-item flex items-center p-3 rounded-lg text-gray-300 hover:text-white">
+<div class="w-6 h-6 flex items-center justify-center mr-3">
+<i class="ri-calendar-line"></i>
+</div>
+<span>Upcoming</span>
+</a>
+</li>
+<li>
+<a href="#" class="sidebar-item flex items-center p-3 rounded-lg text-gray-300 hover:text-white">
+<div class="w-6 h-6 flex items-center justify-center mr-3">
+<i class="ri-checkbox-circle-line"></i>
+</div>
+<span>Completed</span>
+</a>
+</li>
+<li>
+<a href="#" class="sidebar-item flex items-center p-3 rounded-lg text-gray-300 hover:text-white">
+<div class="w-6 h-6 flex items-center justify-center mr-3">
+<i class="ri-flag-line"></i>
+</div>
+<span>Priority</span>
+</a>
+</li>
+</ul>
+<div class="pt-8 pb-4">
+<h3 class="px-3 text-xs font-medium uppercase text-gray-400 tracking-wider">Views</h3>
+</div>
+<ul class="space-y-2">
+<li>
+<a href="#" class="sidebar-item flex items-center p-3 rounded-lg text-gray-300 hover:text-white">
+<div class="w-6 h-6 flex items-center justify-center mr-3">
+<i class="ri-calendar-2-line"></i>
+</div>
+<span>Calendar</span>
+</a>
+</li>
+<li>
+<a href="#" class="sidebar-item flex items-center p-3 rounded-lg text-gray-300 hover:text-white">
+<div class="w-6 h-6 flex items-center justify-center mr-3">
+<i class="ri-sticky-note-line"></i>
+</div>
+<span>Notes</span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+<div class="p-4 border-t border-gray-800">
+<div class="flex items-center">
+<div class="w-10 h-10 rounded-full bg-gray-700 overflow-hidden">
+<img src="https://readdy.ai/api/search-image?query=professional%20portrait%20photo%20of%20a%20young%20business%20person%20with%20neutral%20expression%2C%20high%20quality%2C%20studio%20lighting%2C%20professional%20headshot&width=100&height=100&seq=user1&orientation=squarish" alt="Profile" class="w-full h-full object-cover">
+</div>
+<div class="ml-3">
+<p class="text-sm font-medium">Alexander Mitchell</p>
+<p class="text-xs text-gray-400">Premium Member</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<div class="flex-1 flex flex-col overflow-hidden">
+<!-- Header -->
+<header class="glassmorphism border-b border-gray-800 py-4 px-6">
+<div class="flex items-center justify-between">
+<div class="flex items-center md:hidden">
+<button id="menuButton" class="text-gray-300 hover:text-white p-2 rounded-lg">
+<div class="w-6 h-6 flex items-center justify-center">
+<i class="ri-menu-line"></i>
+</div>
+</button>
+<h1 class="text-2xl font-['Pacifico'] text-primary ml-2">logo</h1>
+</div>
+<div class="hidden md:flex items-center bg-gray-800 rounded-full px-4 py-2 w-96">
+<div class="w-5 h-5 flex items-center justify-center text-gray-400">
+<i class="ri-search-line"></i>
+</div>
+<input type="text" placeholder="Search tasks..." class="bg-transparent border-none ml-2 flex-1 focus:outline-none text-sm">
+</div>
+<div class="flex items-center space-x-4">
+<div class="flex items-center">
+<span class="text-xs mr-2 text-gray-400">Dark</span>
+<label class="custom-switch">
+<input type="checkbox" id="themeToggle">
+<span class="slider"></span>
+</label>
+<span class="text-xs ml-2 text-gray-400">Ivory</span>
+</div>
+<button class="relative p-2 rounded-full hover:bg-gray-800">
+<div class="w-6 h-6 flex items-center justify-center">
+<i class="ri-notification-3-line"></i>
+</div>
+<span class="absolute top-1 right-1 w-2 h-2 bg-primary rounded-full"></span>
+</button>
+</div>
+</div>
+</header>
+<!-- Mobile Search -->
+<div class="md:hidden p-4 bg-gray-900">
+<div class="flex items-center bg-gray-800 rounded-full px-4 py-2">
+<div class="w-5 h-5 flex items-center justify-center text-gray-400">
+<i class="ri-search-line"></i>
+</div>
+<input type="text" placeholder="Search tasks..." class="bg-transparent border-none ml-2 flex-1 focus:outline-none text-sm">
+</div>
+</div>
+<!-- Main Content Area -->
+<main class="flex-1 overflow-y-auto bg-gray-900 p-6">
+<!-- Quote of the Day -->
+<div class="quote-container mb-8 p-6 rounded-lg glassmorphism">
+<div class="flex items-start">
+<div class="w-8 h-8 flex items-center justify-center text-primary mr-4 mt-1">
+<i class="ri-double-quotes-l text-2xl"></i>
+</div>
+<div>
+<p class="text-lg font-light italic mb-2">"The secret of getting ahead is getting started. The secret of getting started is breaking your complex overwhelming tasks into small manageable tasks, and then starting on the first one."</p>
+<p class="text-sm text-gray-400">— Mark Twain</p>
+</div>
+</div>
+</div>
+<!-- Dashboard Header -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+<div>
+<h2 class="text-2xl md:text-3xl font-semibold heading-font">Dashboard</h2>
+<p class="text-gray-400">June 14, 2025 • Saturday</p>
+</div>
+<div class="flex mt-4 md:mt-0">
+<div class="flex mr-4">
+<button class="flex items-center justify-center p-2 bg-gray-800 rounded-l-lg border-r border-gray-700">
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-list-check-2"></i>
+</div>
+</button>
+<button class="flex items-center justify-center p-2 bg-gray-800 rounded-r-lg">
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-grid-line"></i>
+</div>
+</button>
+</div>
+<button id="addTaskBtn" class="flex items-center bg-primary text-black font-medium py-2 px-4 rounded-button">
+<div class="w-5 h-5 flex items-center justify-center mr-2">
+<i class="ri-add-line"></i>
+</div>
+<span class="whitespace-nowrap">New Task</span>
+</button>
+</div>
+</div>
+<!-- Task Summary -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+<div class="glassmorphism rounded-lg p-6">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-lg font-medium">Today's Tasks</h3>
+<div class="w-10 h-10 flex items-center justify-center rounded-full bg-blue-900 bg-opacity-30 text-blue-400">
+<i class="ri-calendar-check-line"></i>
+</div>
+</div>
+<p class="text-3xl font-semibold mb-1">5</p>
+<p class="text-sm text-gray-400">3 completed, 2 remaining</p>
+<div class="w-full h-1 bg-gray-800 rounded-full mt-4 overflow-hidden">
+<div class="h-full bg-blue-500 rounded-full" style="width: 60%"></div>
+</div>
+</div>
+<div class="glassmorphism rounded-lg p-6">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-lg font-medium">High Priority</h3>
+<div class="w-10 h-10 flex items-center justify-center rounded-full bg-red-900 bg-opacity-30 text-red-400">
+<i class="ri-flag-line"></i>
+</div>
+</div>
+<p class="text-3xl font-semibold mb-1">3</p>
+<p class="text-sm text-gray-400">Due within 48 hours</p>
+<div class="w-full h-1 bg-gray-800 rounded-full mt-4 overflow-hidden">
+<div class="h-full bg-red-500 rounded-full" style="width: 30%"></div>
+</div>
+</div>
+<div class="glassmorphism rounded-lg p-6">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-lg font-medium">Weekly Progress</h3>
+<div class="w-10 h-10 flex items-center justify-center rounded-full bg-green-900 bg-opacity-30 text-green-400">
+<i class="ri-bar-chart-line"></i>
+</div>
+</div>
+<p class="text-3xl font-semibold mb-1">68%</p>
+<p class="text-sm text-gray-400">15 of 22 tasks completed</p>
+<div class="w-full h-1 bg-gray-800 rounded-full mt-4 overflow-hidden">
+<div class="h-full bg-green-500 rounded-full" style="width: 68%"></div>
+</div>
+</div>
+</div>
+<!-- Task Categories -->
+<div class="mb-8">
+<h3 class="text-xl font-medium mb-4 playfair">Task Categories</h3>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+<button class="glassmorphism rounded-lg p-4 flex items-center justify-between hover:bg-gray-800 transition-all !rounded-button">
+<div class="flex items-center">
+<div class="w-8 h-8 flex items-center justify-center rounded-full bg-blue-900 bg-opacity-30 text-blue-400 mr-3">
+<i class="ri-briefcase-line"></i>
+</div>
+<span>Work</span>
+</div>
+<span class="text-gray-400">8</span>
+</button>
+<button class="glassmorphism rounded-lg p-4 flex items-center justify-between hover:bg-gray-800 transition-all !rounded-button">
+<div class="flex items-center">
+<div class="w-8 h-8 flex items-center justify-center rounded-full bg-purple-900 bg-opacity-30 text-purple-400 mr-3">
+<i class="ri-book-line"></i>
+</div>
+<span>Personal</span>
+</div>
+<span class="text-gray-400">5</span>
+</button>
+<button class="glassmorphism rounded-lg p-4 flex items-center justify-between hover:bg-gray-800 transition-all !rounded-button">
+<div class="flex items-center">
+<div class="w-8 h-8 flex items-center justify-center rounded-full bg-green-900 bg-opacity-30 text-green-400 mr-3">
+<i class="ri-heart-line"></i>
+</div>
+<span>Health</span>
+</div>
+<span class="text-gray-400">3</span>
+</button>
+<button class="glassmorphism rounded-lg p-4 flex items-center justify-between hover:bg-gray-800 transition-all !rounded-button">
+<div class="flex items-center">
+<div class="w-8 h-8 flex items-center justify-center rounded-full bg-yellow-900 bg-opacity-30 text-yellow-400 mr-3">
+<i class="ri-star-line"></i>
+</div>
+<span>Other</span>
+</div>
+<span class="text-gray-400">6</span>
+</button>
+</div>
+</div>
+<!-- Tasks -->
+<div>
+<div class="flex justify-between items-center mb-4">
+<h3 class="text-xl font-medium playfair">Today's Tasks</h3>
+<div class="flex items-center">
+<button class="text-sm text-gray-400 hover:text-white flex items-center">
+<span>Sort by</span>
+<div class="w-5 h-5 flex items-center justify-center ml-1">
+<i class="ri-arrow-down-s-line"></i>
+</div>
+</button>
+</div>
+</div>
+<div class="space-y-4">
+<!-- Task 1 -->
+<div class="task-card glassmorphism rounded-lg p-4 priority-high">
+<div class="flex items-start">
+<input type="checkbox" class="custom-checkbox mt-1">
+<div class="ml-4 flex-1">
+<div class="flex justify-between mb-2">
+<h4 class="font-medium">Quarterly financial report presentation</h4>
+<div class="flex items-center">
+<span class="text-sm text-gray-400 mr-3">Today, 2:00 PM</span>
+<button class="text-gray-400 hover:text-white">
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-more-2-fill"></i>
+</div>
+</button>
+</div>
+</div>
+<p class="text-sm text-gray-400 mb-3">Finalize slides and practice presentation for the executive team meeting</p>
+<div class="flex flex-col sm:flex-row sm:items-center justify-between">
+<div class="flex items-center mb-2 sm:mb-0">
+<div class="flex -space-x-2 mr-3">
+<div class="w-6 h-6 rounded-full bg-gray-700 border-2 border-gray-800 overflow-hidden">
+<img src="https://readdy.ai/api/search-image?query=professional%20portrait%20photo%20of%20a%20young%20business%20woman%20with%20neutral%20expression%2C%20high%20quality%2C%20studio%20lighting%2C%20professional%20headshot&width=100&height=100&seq=user2&orientation=squarish" alt="User" class="w-full h-full object-cover">
+</div>
+<div class="w-6 h-6 rounded-full bg-gray-700 border-2 border-gray-800 overflow-hidden">
+<img src="https://readdy.ai/api/search-image?query=professional%20portrait%20photo%20of%20a%20middle-aged%20business%20man%20with%20neutral%20expression%2C%20high%20quality%2C%20studio%20lighting%2C%20professional%20headshot&width=100&height=100&seq=user3&orientation=squarish" alt="User" class="w-full h-full object-cover">
+</div>
+</div>
+<span class="text-xs text-gray-400">3/4 subtasks</span>
+</div>
+<div class="w-full sm:w-32">
+<div class="task-progress">
+<div class="task-progress-bar" style="width: 75%"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Task 2 -->
+<div class="task-card glassmorphism rounded-lg p-4 priority-medium">
+<div class="flex items-start">
+<input type="checkbox" class="custom-checkbox mt-1">
+<div class="ml-4 flex-1">
+<div class="flex justify-between mb-2">
+<h4 class="font-medium">Review marketing campaign analytics</h4>
+<div class="flex items-center">
+<span class="text-sm text-gray-400 mr-3">Today, 4:30 PM</span>
+<button class="text-gray-400 hover:text-white">
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-more-2-fill"></i>
+</div>
+</button>
+</div>
+</div>
+<p class="text-sm text-gray-400 mb-3">Analyze Q2 campaign performance and prepare recommendations for next quarter</p>
+<div class="flex flex-col sm:flex-row sm:items-center justify-between">
+<div class="flex items-center mb-2 sm:mb-0">
+<div class="flex -space-x-2 mr-3">
+<div class="w-6 h-6 rounded-full bg-gray-700 border-2 border-gray-800 overflow-hidden">
+<img src="https://readdy.ai/api/search-image?query=professional%20portrait%20photo%20of%20a%20young%20business%20woman%20with%20neutral%20expression%2C%20high%20quality%2C%20studio%20lighting%2C%20professional%20headshot&width=100&height=100&seq=user4&orientation=squarish" alt="User" class="w-full h-full object-cover">
+</div>
+</div>
+<span class="text-xs text-gray-400">1/3 subtasks</span>
+</div>
+<div class="w-full sm:w-32">
+<div class="task-progress">
+<div class="task-progress-bar" style="width: 33%"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Task 3 (Completed) -->
+<div class="task-card glassmorphism rounded-lg p-4 opacity-60">
+<div class="flex items-start">
+<input type="checkbox" class="custom-checkbox mt-1" checked>
+<div class="ml-4 flex-1">
+<div class="flex justify-between mb-2">
+<h4 class="font-medium completed">Team standup meeting</h4>
+<div class="flex items-center">
+<span class="text-sm text-gray-400 mr-3">Today, 9:30 AM</span>
+<button class="text-gray-400 hover:text-white">
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-more-2-fill"></i>
+</div>
+</button>
+</div>
+</div>
+<p class="text-sm text-gray-400 mb-3 completed">Daily team check-in to discuss progress and blockers</p>
+</div>
+</div>
+</div>
+<!-- Task 4 -->
+<div class="task-card glassmorphism rounded-lg p-4 priority-low">
+<div class="flex items-start">
+<input type="checkbox" class="custom-checkbox mt-1">
+<div class="ml-4 flex-1">
+<div class="flex justify-between mb-2">
+<h4 class="font-medium">Schedule client follow-up calls</h4>
+<div class="flex items-center">
+<span class="text-sm text-gray-400 mr-3">Today, 5:00 PM</span>
+<button class="text-gray-400 hover:text-white">
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-more-2-fill"></i>
+</div>
+</button>
+</div>
+</div>
+<p class="text-sm text-gray-400 mb-3">Contact key clients to schedule quarterly review meetings</p>
+<div class="flex flex-col sm:flex-row sm:items-center justify-between">
+<div class="flex items-center mb-2 sm:mb-0">
+<div class="flex -space-x-2 mr-3">
+<div class="w-6 h-6 rounded-full bg-gray-700 border-2 border-gray-800 overflow-hidden">
+<img src="https://readdy.ai/api/search-image?query=professional%20portrait%20photo%20of%20a%20young%20business%20man%20with%20neutral%20expression%2C%20high%20quality%2C%20studio%20lighting%2C%20professional%20headshot&width=100&height=100&seq=user5&orientation=squarish" alt="User" class="w-full h-full object-cover">
+</div>
+</div>
+<span class="text-xs text-gray-400">0/5 subtasks</span>
+</div>
+<div class="w-full sm:w-32">
+<div class="task-progress">
+<div class="task-progress-bar" style="width: 0%"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Task 5 (Completed) -->
+<div class="task-card glassmorphism rounded-lg p-4 opacity-60">
+<div class="flex items-start">
+<input type="checkbox" class="custom-checkbox mt-1" checked>
+<div class="ml-4 flex-1">
+<div class="flex justify-between mb-2">
+<h4 class="font-medium completed">Update project documentation</h4>
+<div class="flex items-center">
+<span class="text-sm text-gray-400 mr-3">Today, 11:00 AM</span>
+<button class="text-gray-400 hover:text-white">
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-more-2-fill"></i>
+</div>
+</button>
+</div>
+</div>
+<p class="text-sm text-gray-400 mb-3 completed">Revise project specs and update the knowledge base</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+<!-- Mobile Navigation -->
+<div class="md:hidden fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-800 py-2 px-6">
+<div class="flex justify-between">
+<button class="flex flex-col items-center p-2 text-primary">
+<div class="w-6 h-6 flex items-center justify-center">
+<i class="ri-dashboard-line"></i>
+</div>
+<span class="text-xs mt-1">Dashboard</span>
+</button>
+<button class="flex flex-col items-center p-2 text-gray-400">
+<div class="w-6 h-6 flex items-center justify-center">
+<i class="ri-calendar-check-line"></i>
+</div>
+<span class="text-xs mt-1">Today</span>
+</button>
+<button class="flex flex-col items-center p-2 text-gray-400">
+<div class="w-6 h-6 flex items-center justify-center relative -top-4">
+<div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center">
+<i class="ri-add-line text-black text-xl"></i>
+</div>
+</div>
+<span class="text-xs mt-1 relative -top-4">Add</span>
+</button>
+<button class="flex flex-col items-center p-2 text-gray-400">
+<div class="w-6 h-6 flex items-center justify-center">
+<i class="ri-calendar-line"></i>
+</div>
+<span class="text-xs mt-1">Calendar</span>
+</button>
+<button class="flex flex-col items-center p-2 text-gray-400">
+<div class="w-6 h-6 flex items-center justify-center">
+<i class="ri-user-line"></i>
+</div>
+<span class="text-xs mt-1">Profile</span>
+</button>
+</div>
+</div>
+<!-- Mobile Sidebar Menu (Hidden by default) -->
+<div id="mobileSidebar" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+<div class="w-64 h-full bg-gray-900 p-4 transform -translate-x-full transition-transform duration-300 ease-in-out" id="sidebarPanel">
+<div class="flex justify-between items-center mb-6">
+<h1 class="text-2xl font-['Pacifico'] text-primary">logo</h1>
+<button id="closeSidebar" class="text-gray-400 hover:text-white">
+<div class="w-6 h-6 flex items-center justify-center">
+<i class="ri-close-line"></i>
+</div>
+</button>
+</div>
+<nav>
+<ul class="space-y-2">
+<li>
+<a href="#" class="sidebar-item active flex items-center p-3 rounded-lg text-white">
+<div class="w-6 h-6 flex items-center justify-center mr-3">
+<i class="ri-dashboard-line"></i>
+</div>
+<span>Dashboard</span>
+</a>
+</li>
+<li>
+<a href="#" class="sidebar-item flex items-center p-3 rounded-lg text-gray-300 hover:text-white">
+<div class="w-6 h-6 flex items-center justify-center mr-3">
+<i class="ri-calendar-check-line"></i>
+</div>
+<span>Today</span>
+</a>
+</li>
+<li>
+<a href="#" class="sidebar-item flex items-center p-3 rounded-lg text-gray-300 hover:text-white">
+<div class="w-6 h-6 flex items-center justify-center mr-3">
+<i class="ri-calendar-line"></i>
+</div>
+<span>Upcoming</span>
+</a>
+</li>
+<li>
+<a href="#" class="sidebar-item flex items-center p-3 rounded-lg text-gray-300 hover:text-white">
+<div class="w-6 h-6 flex items-center justify-center mr-3">
+<i class="ri-checkbox-circle-line"></i>
+</div>
+<span>Completed</span>
+</a>
+</li>
+<li>
+<a href="#" class="sidebar-item flex items-center p-3 rounded-lg text-gray-300 hover:text-white">
+<div class="w-6 h-6 flex items-center justify-center mr-3">
+<i class="ri-flag-line"></i>
+</div>
+<span>Priority</span>
+</a>
+</li>
+</ul>
+<div class="pt-8 pb-4">
+<h3 class="px-3 text-xs font-medium uppercase text-gray-400 tracking-wider">Views</h3>
+</div>
+<ul class="space-y-2">
+<li>
+<a href="#" class="sidebar-item flex items-center p-3 rounded-lg text-gray-300 hover:text-white">
+<div class="w-6 h-6 flex items-center justify-center mr-3">
+<i class="ri-calendar-2-line"></i>
+</div>
+<span>Calendar</span>
+</a>
+</li>
+<li>
+<a href="#" class="sidebar-item flex items-center p-3 rounded-lg text-gray-300 hover:text-white">
+<div class="w-6 h-6 flex items-center justify-center mr-3">
+<i class="ri-sticky-note-line"></i>
+</div>
+<span>Notes</span>
+</a>
+</li>
+</ul>
+</nav>
+<div class="mt-auto pt-8">
+<div class="flex items-center p-4 glassmorphism rounded-lg">
+<div class="w-10 h-10 rounded-full bg-gray-700 overflow-hidden">
+<img src="https://readdy.ai/api/search-image?query=professional%20portrait%20photo%20of%20a%20young%20business%20person%20with%20neutral%20expression%2C%20high%20quality%2C%20studio%20lighting%2C%20professional%20headshot&width=100&height=100&seq=user1&orientation=squarish" alt="Profile" class="w-full h-full object-cover">
+</div>
+<div class="ml-3">
+<p class="text-sm font-medium">Alexander Mitchell</p>
+<p class="text-xs text-gray-400">Premium Member</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Add Task Modal (Hidden by default) -->
+<div id="addTaskModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+<div class="bg-gray-900 rounded-lg w-full max-w-md mx-4 glassmorphism">
+<div class="p-6">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-xl font-medium playfair">Create New Task</h3>
+<button id="closeTaskModal" class="text-gray-400 hover:text-white">
+<div class="w-6 h-6 flex items-center justify-center">
+<i class="ri-close-line"></i>
+</div>
+</button>
+</div>
+<form id="taskForm">
+<div class="mb-4">
+<label for="taskTitle" class="block text-sm font-medium text-gray-400 mb-2">Title</label>
+<input type="text" id="taskTitle" class="w-full bg-gray-800 border-none rounded-lg p-3 text-white focus:ring-2 focus:ring-primary focus:outline-none" placeholder="Task title">
+</div>
+<div class="mb-4">
+<label for="taskDescription" class="block text-sm font-medium text-gray-400 mb-2">Description</label>
+<textarea id="taskDescription" rows="3" class="w-full bg-gray-800 border-none rounded-lg p-3 text-white focus:ring-2 focus:ring-primary focus:outline-none" placeholder="Task description"></textarea>
+</div>
+<div class="grid grid-cols-2 gap-4 mb-4">
+<div>
+<label for="taskDate" class="block text-sm font-medium text-gray-400 mb-2">Due Date</label>
+<input type="date" id="taskDate" class="w-full bg-gray-800 border-none rounded-lg p-3 text-white focus:ring-2 focus:ring-primary focus:outline-none">
+</div>
+<div>
+<label for="taskTime" class="block text-sm font-medium text-gray-400 mb-2">Due Time</label>
+<input type="time" id="taskTime" class="w-full bg-gray-800 border-none rounded-lg p-3 text-white focus:ring-2 focus:ring-primary focus:outline-none">
+</div>
+</div>
+<div class="mb-4">
+<label class="block text-sm font-medium text-gray-400 mb-2">Priority</label>
+<div class="flex space-x-4">
+<label class="flex items-center">
+<input type="radio" name="priority" value="low" class="hidden">
+<div class="w-4 h-4 rounded-full border-2 border-green-500 mr-2 flex items-center justify-center priority-radio">
+<div class="w-2 h-2 rounded-full bg-green-500 hidden priority-dot"></div>
+</div>
+<span class="text-sm">Low</span>
+</label>
+<label class="flex items-center">
+<input type="radio" name="priority" value="medium" class="hidden" checked>
+<div class="w-4 h-4 rounded-full border-2 border-yellow-500 mr-2 flex items-center justify-center priority-radio">
+<div class="w-2 h-2 rounded-full bg-yellow-500 priority-dot"></div>
+</div>
+<span class="text-sm">Medium</span>
+</label>
+<label class="flex items-center">
+<input type="radio" name="priority" value="high" class="hidden">
+<div class="w-4 h-4 rounded-full border-2 border-red-500 mr-2 flex items-center justify-center priority-radio">
+<div class="w-2 h-2 rounded-full bg-red-500 hidden priority-dot"></div>
+</div>
+<span class="text-sm">High</span>
+</label>
+</div>
+</div>
+<div class="mb-6">
+<label class="block text-sm font-medium text-gray-400 mb-2">Category</label>
+<div class="relative">
+<select id="taskCategory" class="w-full bg-gray-800 border-none rounded-lg p-3 text-white focus:ring-2 focus:ring-primary focus:outline-none appearance-none pr-8">
+<option value="work">Work</option>
+<option value="personal">Personal</option>
+<option value="health">Health</option>
+<option value="other">Other</option>
+</select>
+<div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+<div class="w-5 h-5 flex items-center justify-center text-gray-400">
+<i class="ri-arrow-down-s-line"></i>
+</div>
+</div>
+</div>
+</div>
+<div class="flex justify-end space-x-3">
+<button type="button" id="cancelTaskBtn" class="py-2 px-4 border border-gray-600 rounded-button text-gray-300 hover:bg-gray-800 transition-colors whitespace-nowrap">Cancel</button>
+<button type="submit" class="py-2 px-4 bg-primary text-black font-medium rounded-button hover:bg-opacity-90 transition-colors whitespace-nowrap">Create Task</button>
+</div>
+</form>
+</div>
+</div>
+</div>
+<script id="themeToggleScript">
+document.addEventListener('DOMContentLoaded', function() {
+const themeToggle = document.getElementById('themeToggle');
+themeToggle.addEventListener('change', function() {
+if (this.checked) {
+// Switch to Ivory Mode
+document.body.style.backgroundColor = '#f8f7f1';
+document.body.style.color = '#333333';
+// Update glassmorphism elements
+const glassmorphismElements = document.querySelectorAll('.glassmorphism');
+glassmorphismElements.forEach(element => {
+element.style.background = 'rgba(255, 255, 255, 0.85)';
+element.style.borderColor = 'rgba(0, 0, 0, 0.05)';
+});
+// Update text colors
+document.querySelectorAll('.text-gray-400').forEach(el => {
+el.style.color = '#666666';
+});
+document.querySelectorAll('.text-white').forEach(el => {
+el.style.color = '#333333';
+});
+// Update sidebar items
+const sidebarItems = document.querySelectorAll('.sidebar-item');
+sidebarItems.forEach(item => {
+item.classList.remove('hover:text-white');
+item.classList.add('hover:text-gray-800');
+item.style.color = '#333333';
+});
+// Update background colors
+document.querySelectorAll('.bg-gray-800, .bg-gray-900').forEach(el => {
+el.style.backgroundColor = '#ffffff';
+});
+} else {
+// Switch back to Dark Mode
+document.body.style.backgroundColor = '#121212';
+document.body.style.color = '#e0e0e0';
+// Update glassmorphism elements
+const glassmorphismElements = document.querySelectorAll('.glassmorphism');
+glassmorphismElements.forEach(element => {
+element.style.background = 'rgba(30, 30, 30, 0.7)';
+element.style.borderColor = 'rgba(255, 255, 255, 0.05)';
+});
+// Reset text colors
+document.querySelectorAll('.text-gray-400').forEach(el => {
+el.style.color = '';
+});
+document.querySelectorAll('.text-white').forEach(el => {
+el.style.color = '';
+});
+// Update sidebar items
+const sidebarItems = document.querySelectorAll('.sidebar-item');
+sidebarItems.forEach(item => {
+item.classList.remove('hover:text-gray-800');
+item.classList.add('hover:text-white');
+item.style.color = '';
+});
+// Reset background colors
+document.querySelectorAll('.bg-gray-800, .bg-gray-900').forEach(el => {
+el.style.backgroundColor = '';
+});
+}
+});
+});
+</script>
+<script id="taskCheckboxScript">
+document.addEventListener('DOMContentLoaded', function() {
+const checkboxes = document.querySelectorAll('.custom-checkbox');
+checkboxes.forEach(checkbox => {
+checkbox.addEventListener('change', function() {
+const taskCard = this.closest('.task-card');
+const taskTitle = taskCard.querySelector('h4');
+const taskDesc = taskCard.querySelector('p');
+if (this.checked) {
+taskCard.classList.add('opacity-60');
+taskTitle.classList.add('completed');
+if (taskDesc) taskDesc.classList.add('completed');
+} else {
+taskCard.classList.remove('opacity-60');
+taskTitle.classList.remove('completed');
+if (taskDesc) taskDesc.classList.remove('completed');
+}
+});
+});
+});
+</script>
+<script id="mobileSidebarScript">
+document.addEventListener('DOMContentLoaded', function() {
+const menuButton = document.getElementById('menuButton');
+const mobileSidebar = document.getElementById('mobileSidebar');
+const sidebarPanel = document.getElementById('sidebarPanel');
+const closeSidebar = document.getElementById('closeSidebar');
+menuButton.addEventListener('click', function() {
+mobileSidebar.classList.remove('hidden');
+setTimeout(() => {
+sidebarPanel.style.transform = 'translateX(0)';
+}, 10);
+});
+function closeSidebarMenu() {
+sidebarPanel.style.transform = 'translateX(-100%)';
+setTimeout(() => {
+mobileSidebar.classList.add('hidden');
+}, 300);
+}
+closeSidebar.addEventListener('click', closeSidebarMenu);
+mobileSidebar.addEventListener('click', function(e) {
+if (e.target === mobileSidebar) {
+closeSidebarMenu();
+}
+});
+});
+</script>
+<script id="taskModalScript">
+document.addEventListener('DOMContentLoaded', function() {
+const addTaskBtn = document.getElementById('addTaskBtn');
+const addTaskModal = document.getElementById('addTaskModal');
+const closeTaskModal = document.getElementById('closeTaskModal');
+const cancelTaskBtn = document.getElementById('cancelTaskBtn');
+const taskForm = document.getElementById('taskForm');
+const priorityRadios = document.querySelectorAll('input[name="priority"]');
+// Show modal
+addTaskBtn.addEventListener('click', function() {
+addTaskModal.classList.remove('hidden');
+});
+// Hide modal
+function hideModal() {
+addTaskModal.classList.add('hidden');
+}
+closeTaskModal.addEventListener('click', hideModal);
+cancelTaskBtn.addEventListener('click', hideModal);
+// Close modal when clicking outside
+addTaskModal.addEventListener('click', function(e) {
+if (e.target === addTaskModal) {
+hideModal();
+}
+});
+// Priority radio buttons
+priorityRadios.forEach(radio => {
+radio.addEventListener('change', function() {
+// Hide all dots
+document.querySelectorAll('.priority-dot').forEach(dot => {
+dot.classList.add('hidden');
+});
+// Show the selected dot
+const selectedDot = this.parentElement.querySelector('.priority-dot');
+selectedDot.classList.remove('hidden');
+});
+});
+// Form submission
+taskForm.addEventListener('submit', function(e) {
+e.preventDefault();
+// Get form values
+const title = document.getElementById('taskTitle').value;
+const description = document.getElementById('taskDescription').value;
+const date = document.getElementById('taskDate').value;
+const time = document.getElementById('taskTime').value;
+const priority = document.querySelector('input[name="priority"]:checked').value;
+const category = document.getElementById('taskCategory').value;
+// Here you would typically send this data to your backend
+console.log({
+title,
+description,
+date,
+time,
+priority,
+category
+});
+// Close the modal
+hideModal();
+// Reset form
+taskForm.reset();
+// Show the medium priority dot (default)
+document.querySelectorAll('.priority-dot').forEach(dot => {
+dot.classList.add('hidden');
+});
+document.querySelectorAll('input[name="priority"]')[1].checked = true;
+document.querySelectorAll('.priority-dot')[1].classList.remove('hidden');
+});
+});
+</script>
+</body>
+</html>
