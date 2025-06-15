@@ -109,32 +109,33 @@ input:checked + .slider {
 background-color: #d4af37;
 }
 input:checked + .slider:before {
-transform: translateX(24px);
+        transform: translateX(24px);
 }
 .completed {
-text-decoration: line-through;
-opacity: 0.6;
+        text-decoration: line-through;
+        opacity: 0.6;
 }
+
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
--webkit-appearance: none;
-margin: 0;
+        -webkit-appearance: none;
+        margin: 0;
 }
 input[type="date"]::-webkit-calendar-picker-indicator {
-filter: invert(1);
-cursor: pointer;
+        filter: invert(1);
+        cursor: pointer;
 }
 .task-progress {
-height: 4px;
-background-color: rgba(255, 255, 255, 0.1);
-border-radius: 2px;
-overflow: hidden;
+        height: 4px;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 2px;
+        overflow: hidden;
 }
 .task-progress-bar {
-height: 100%;
-background-color: #d4af37;
-border-radius: 2px;
-transition: width 0.3s ease;
+        height: 100%;
+        background-color: #d4af37;
+        border-radius: 2px;
+        transition: width 0.3s ease;
 }
 .quote-container {
         background: linear-gradient(135deg, rgba(30, 86, 49, 0.3), rgba(30, 30, 60, 0.3));
