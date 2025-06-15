@@ -137,5 +137,5 @@ border-radius: 2px;
 transition: width 0.3s ease;
 }
 .quote-container {
-background: linear-gradient(135deg, rgba(30, 86, 49, 0.3), rgba(30, 30, 60, 0.3));
+        background: linear-gradient(135deg, rgba(30, 86, 49, 0.3), rgba(30, 30, 60, 0.3));
 }
