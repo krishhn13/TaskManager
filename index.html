@@ -709,6 +709,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 });
 </script>
+
 <script id="taskCheckboxScript">
 document.addEventListener('DOMContentLoaded', function() {
 const checkboxes = document.querySelectorAll('.custom-checkbox');
@@ -757,72 +758,78 @@ closeSidebarMenu();
 });
 </script>
 <script id="taskModalScript">
-document.addEventListener('DOMContentLoaded', function() {
-const addTaskBtn = document.getElementById('addTaskBtn');
-const addTaskModal = document.getElementById('addTaskModal');
-const closeTaskModal = document.getElementById('closeTaskModal');
-const cancelTaskBtn = document.getElementById('cancelTaskBtn');
-const taskForm = document.getElementById('taskForm');
-const priorityRadios = document.querySelectorAll('input[name="priority"]');
-// Show modal
-addTaskBtn.addEventListener('click', function() {
-addTaskModal.classList.remove('hidden');
-});
-// Hide modal
-function hideModal() {
-addTaskModal.classList.add('hidden');
-}
-closeTaskModal.addEventListener('click', hideModal);
-cancelTaskBtn.addEventListener('click', hideModal);
-// Close modal when clicking outside
-addTaskModal.addEventListener('click', function(e) {
-if (e.target === addTaskModal) {
-hideModal();
-}
-});
-// Priority radio buttons
-priorityRadios.forEach(radio => {
-radio.addEventListener('change', function() {
-// Hide all dots
-document.querySelectorAll('.priority-dot').forEach(dot => {
-dot.classList.add('hidden');
-});
-// Show the selected dot
-const selectedDot = this.parentElement.querySelector('.priority-dot');
-selectedDot.classList.remove('hidden');
-});
-});
-// Form submission
-taskForm.addEventListener('submit', function(e) {
-e.preventDefault();
-// Get form values
-const title = document.getElementById('taskTitle').value;
-const description = document.getElementById('taskDescription').value;
-const date = document.getElementById('taskDate').value;
-const time = document.getElementById('taskTime').value;
-const priority = document.querySelector('input[name="priority"]:checked').value;
-const category = document.getElementById('taskCategory').value;
-// Here you would typically send this data to your backend
-console.log({
-title,
-description,
-date,
-time,
-priority,
-category
-});
-// Close the modal
-hideModal();
-// Reset form
-taskForm.reset();
-// Show the medium priority dot (default)
-document.querySelectorAll('.priority-dot').forEach(dot => {
-dot.classList.add('hidden');
-});
-document.querySelectorAll('input[name="priority"]')[1].checked = true;
-document.querySelectorAll('.priority-dot')[1].classList.remove('hidden');
-});
-});
+        document.addEventListener('DOMContentLoaded', function() {
+                const addTaskBtn = document.getElementById('addTaskBtn');
+                const addTaskModal = document.getElementById('addTaskModal');
+                const closeTaskModal = document.getElementById('closeTaskModal');
+                const cancelTaskBtn = document.getElementById('cancelTaskBtn');
+                const taskForm = document.getElementById('taskForm');
+                const priorityRadios = document.querySelectorAll('input[name="priority"]');
+                // Show modal
+                addTaskBtn.addEventListener('click', function() {
+                        addTaskModal.classList.remove('hidden');
+                });
+                // Hide modal
+                function hideModal() {
+                        addTaskModal.classList.add('hidden');
+                }
+                closeTaskModal.addEventListener('click', hideModal);
+                cancelTaskBtn.addEventListener('click', hideModal);
+
+                // Close modal when clicking outside
+                addTaskModal.addEventListener('click', function(e) {
+                        if (e.target === addTaskModal) {
+                                hideModal();
+                        }       
+                });
+
+                // Priority radio buttons
+                priorityRadios.forEach(radio => {
+                        radio.addEventListener('change', function() {
+                                // Hide all dots
+                                document.querySelectorAll('.priority-dot').forEach(dot => {
+                                        dot.classList.add('hidden');
+                        });
+                        // Show the selected dot
+                                const selectedDot = this.parentElement.querySelector('.priority-dot');
+                                selectedDot.classList.remove('hidden');
+                        });
+                });
+
+                // Form submission
+                taskForm.addEventListener('submit', function(e) {
+                        e.preventDefault();
+                        // Get form values
+                        const title = document.getElementById('taskTitle').value;
+                        const description = document.getElementById('taskDescription').value;
+                        const date = document.getElementById('taskDate').value;
+                        const time = document.getElementById('taskTime').value;
+                        const priority = document.querySelector('input[name="priority"]:checked').value;
+                        const category = document.getElementById('taskCategory').value;
+                        // Here you would typically send this data to your backend
+                        console.log({
+                                title,
+                                description,
+                                date,
+                                time,
+                                priority,
+                                category
+                        });
+
+                        // Close the modal
+                        hideModal();
+
+                        // Reset form
+                        taskForm.reset();
+                        
+                        // Show the medium priority dot (default)
+                        document.querySelectorAll('.priority-dot').forEach(dot => {
+                                dot.classList.add('hidden');
+                        });
+                        document.querySelectorAll('input[name="priority"]')[1].checked = true;
+                        document.querySelectorAll('.priority-dot')[1].classList.remove('hidden');
+                });
+        });
 </script>
 </body>
 </html>
