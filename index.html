@@ -711,52 +711,57 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <script id="taskCheckboxScript">
-document.addEventListener('DOMContentLoaded', function() {
-const checkboxes = document.querySelectorAll('.custom-checkbox');
-checkboxes.forEach(checkbox => {
-checkbox.addEventListener('change', function() {
-const taskCard = this.closest('.task-card');
-const taskTitle = taskCard.querySelector('h4');
-const taskDesc = taskCard.querySelector('p');
-if (this.checked) {
-taskCard.classList.add('opacity-60');
-taskTitle.classList.add('completed');
-if (taskDesc) taskDesc.classList.add('completed');
-} else {
-taskCard.classList.remove('opacity-60');
-taskTitle.classList.remove('completed');
-if (taskDesc) taskDesc.classList.remove('completed');
-}
-});
-});
-});
+        document.addEventListener('DOMContentLoaded', function() {
+                const checkboxes = document.querySelectorAll('.custom-checkbox');
+                checkboxes.forEach(checkbox => {
+                        checkbox.addEventListener('change', function() {
+                                const taskCard = this.closest('.task-card');
+                                const taskTitle = taskCard.querySelector('h4');
+                                const taskDesc = taskCard.querySelector('p');
+                                
+                                if (this.checked) {
+                                        taskCard.classList.add('opacity-60');
+                                        taskTitle.classList.add('completed');
+                                        if (taskDesc) taskDesc.classList.add('completed');
+                                } else {
+                                        taskCard.classList.remove('opacity-60');
+                                        taskTitle.classList.remove('completed');
+                                        if (taskDesc) taskDesc.classList.remove('completed');
+                                }
+                        });
+                });
+        });
 </script>
 <script id="mobileSidebarScript">
-document.addEventListener('DOMContentLoaded', function() {
-const menuButton = document.getElementById('menuButton');
-const mobileSidebar = document.getElementById('mobileSidebar');
-const sidebarPanel = document.getElementById('sidebarPanel');
-const closeSidebar = document.getElementById('closeSidebar');
-menuButton.addEventListener('click', function() {
-mobileSidebar.classList.remove('hidden');
-setTimeout(() => {
-sidebarPanel.style.transform = 'translateX(0)';
-}, 10);
-});
-function closeSidebarMenu() {
-sidebarPanel.style.transform = 'translateX(-100%)';
-setTimeout(() => {
-mobileSidebar.classList.add('hidden');
-}, 300);
-}
-closeSidebar.addEventListener('click', closeSidebarMenu);
-mobileSidebar.addEventListener('click', function(e) {
-if (e.target === mobileSidebar) {
-closeSidebarMenu();
-}
-});
-});
+        document.addEventListener('DOMContentLoaded', function() {
+
+                const menuButton = document.getElementById('menuButton');
+                const mobileSidebar = document.getElementById('mobileSidebar');
+                const sidebarPanel = document.getElementById('sidebarPanel');
+                const closeSidebar = document.getElementById('closeSidebar');
+
+                menuButton.addEventListener('click', function() {
+                        mobileSidebar.classList.remove('hidden');
+                        setTimeout(() => {
+                        sidebarPanel.style.transform = 'translateX(0)';
+                        }, 10);
+                });
+                function closeSidebarMenu() {
+                        sidebarPanel.style.transform = 'translateX(-100%)';
+                                setTimeout(() => {
+                                        mobileSidebar.classList.add('hidden');
+                                }, 300);
+                        }
+                        closeSidebar.addEventListener('click', closeSidebarMenu);
+                        mobileSidebar.addEventListener('click', function(e) {
+                        if (e.target === mobileSidebar) {
+                                closeSidebarMenu();
+                        }
+                });
+        });
 </script>
+
+
 <script id="taskModalScript">
         document.addEventListener('DOMContentLoaded', function() {
                 const addTaskBtn = document.getElementById('addTaskBtn');
@@ -821,7 +826,7 @@ closeSidebarMenu();
 
                         // Reset form
                         taskForm.reset();
-                        
+
                         // Show the medium priority dot (default)
                         document.querySelectorAll('.priority-dot').forEach(dot => {
                                 dot.classList.add('hidden');
