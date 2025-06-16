@@ -649,65 +649,65 @@
 document.addEventListener('DOMContentLoaded', function() {
         const themeToggle = document.getElementById('themeToggle');
         themeToggle.addEventListener('change', function() {
-        if (this.checked) {
-        // Switch to Ivory Mode
-        document.body.style.backgroundColor = '#f8f7f1';
-        document.body.style.color = '#333333';
-        // Update glassmorphism elements
-        const glassmorphismElements = document.querySelectorAll('.glassmorphism');
-        glassmorphismElements.forEach(element => {
-        element.style.background = 'rgba(255, 255, 255, 0.85)';
-        element.style.borderColor = 'rgba(0, 0, 0, 0.05)';
+                if (this.checked) {
+                        // Switch to Ivory Mode
+                        document.body.style.backgroundColor = '#f8f7f1';
+                        document.body.style.color = '#333333';
+                        // Update glassmorphism elements
+                        const glassmorphismElements = document.querySelectorAll('.glassmorphism');
+                        glassmorphismElements.forEach(element => {
+                        element.style.background = 'rgba(255, 255, 255, 0.85)';
+                        element.style.borderColor = 'rgba(0, 0, 0, 0.05)';
+                        });
+                        // Update text colors
+                        document.querySelectorAll('.text-gray-400').forEach(el => {
+                                el.style.color = '#666666';
+                        });
+                        document.querySelectorAll('.text-white').forEach(el => {
+                                el.style.color = '#333333';
+                        });
+                        // Update sidebar items
+                        const sidebarItems = document.querySelectorAll('.sidebar-item');
+                        sidebarItems.forEach(item => {
+                                item.classList.remove('hover:text-white');
+                                item.classList.add('hover:text-gray-800');
+                                item.style.color = '#333333';
+                        });
+                        // Update background colors
+                        document.querySelectorAll('.bg-gray-800, .bg-gray-900').forEach(el => {
+                                el.style.backgroundColor = '#ffffff';
+                        });
+                } else {
+                        // Switch back to Dark Mode
+                        document.body.style.backgroundColor = '#121212';
+                        document.body.style.color = '#e0e0e0';
+                        // Update glassmorphism elements
+                        const glassmorphismElements = document.querySelectorAll('.glassmorphism');
+                        glassmorphismElements.forEach(element => {
+                        element.style.background = 'rgba(30, 30, 30, 0.7)';
+                        element.style.borderColor = 'rgba(255, 255, 255, 0.05)';
+                        });
+                        // Reset text colors
+                        document.querySelectorAll('.text-gray-400').forEach(el => {
+                                el.style.color = '';
+                        });
+                        document.querySelectorAll('.text-white').forEach(el => {
+                                el.style.color = '';
+                        });
+                        // Update sidebar items
+                        const sidebarItems = document.querySelectorAll('.sidebar-item');
+                        sidebarItems.forEach(item => {
+                                item.classList.remove('hover:text-gray-800');
+                                item.classList.add('hover:text-white');
+                                item.style.color = '';
+                        });
+                        // Reset background colors
+                        document.querySelectorAll('.bg-gray-800, .bg-gray-900').forEach(el => {
+                                el.style.backgroundColor = '';
+                        });
+                }
         });
-        // Update text colors
-        document.querySelectorAll('.text-gray-400').forEach(el => {
-        el.style.color = '#666666';
-        });
-        document.querySelectorAll('.text-white').forEach(el => {
-        el.style.color = '#333333';
-        });
-        // Update sidebar items
-        const sidebarItems = document.querySelectorAll('.sidebar-item');
-        sidebarItems.forEach(item => {
-        item.classList.remove('hover:text-white');
-        item.classList.add('hover:text-gray-800');
-        item.style.color = '#333333';
-        });
-        // Update background colors
-        document.querySelectorAll('.bg-gray-800, .bg-gray-900').forEach(el => {
-        el.style.backgroundColor = '#ffffff';
-        });
-        } else {
-        // Switch back to Dark Mode
-        document.body.style.backgroundColor = '#121212';
-        document.body.style.color = '#e0e0e0';
-        // Update glassmorphism elements
-        const glassmorphismElements = document.querySelectorAll('.glassmorphism');
-        glassmorphismElements.forEach(element => {
-        element.style.background = 'rgba(30, 30, 30, 0.7)';
-        element.style.borderColor = 'rgba(255, 255, 255, 0.05)';
-        });
-        // Reset text colors
-        document.querySelectorAll('.text-gray-400').forEach(el => {
-        el.style.color = '';
-        });
-        document.querySelectorAll('.text-white').forEach(el => {
-        el.style.color = '';
-        });
-        // Update sidebar items
-        const sidebarItems = document.querySelectorAll('.sidebar-item');
-        sidebarItems.forEach(item => {
-        item.classList.remove('hover:text-gray-800');
-        item.classList.add('hover:text-white');
-        item.style.color = '';
-        });
-        // Reset background colors
-        document.querySelectorAll('.bg-gray-800, .bg-gray-900').forEach(el => {
-        el.style.backgroundColor = '';
-        });
-        }
-        });
-        });
+});
 </script>
 <script id="taskCheckboxScript">
 document.addEventListener('DOMContentLoaded', function() {
